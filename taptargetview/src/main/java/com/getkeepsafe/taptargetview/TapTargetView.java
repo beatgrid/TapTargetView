@@ -666,8 +666,8 @@ public class TapTargetView extends View {
   protected void onDraw(Canvas c) {
     if (isDismissed || outerCircleCenter == null) return;
 
-    if (topBoundary > 0 && bottomBoundary > 0) {
-      c.clipRect(0, topBoundary, getWidth(), bottomBoundary);
+    if (bottomBoundary > 0) {
+      c.clipRect(0, 0, getWidth(), bottomBoundary);
     }
 
     if (dimColor != -1) {
