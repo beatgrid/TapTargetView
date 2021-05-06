@@ -1,6 +1,40 @@
+plugins {
+    id 'maven-publish'
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.vanniktech.maven.publish'
+
+def artifactoryUser = System.getenv('ARTIFACTORY_BEATGRID_CREDS_USR')
+def artifactoryPassword = System.getenv('ARTIFACTORY_BEATGRID_CREDS_PSW')
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId "$GROUP"
+            artifactId "$POM_ARTIFACT_ID"
+            version "$VERSION_NAME"
+            afterEvaluate {
+                artifact bundleReleaseAar
+                artifact sourcesJar
+            }
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username "${artifactoryUser}"
+                password "${artifactoryPassword}"
+            }
+            url "https://artifactory.beatgrid.net/artifactory/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release' }-local"
+        }
+    }
+}
 
 android {
     compileSdkVersion defCompileSdkVersion
@@ -14,7 +48,7 @@ android {
 dependencies {
     api "androidx.annotation:annotation:$defAndroidXVersion"
     api "androidx.appcompat:appcompat:$defAndroidXVersion"
-    implementation "androidx.core:core:$defAndroidXVersion"
+    implementation "androidx.core:core:1.3.2"
 }
 
 // build a jar with source files

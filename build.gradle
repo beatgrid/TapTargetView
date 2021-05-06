@@ -1,11 +1,12 @@
 buildscript {
     repositories {
-        google()
+        mavenLocal()
         mavenCentral()
+        google()
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:4.1.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath 'com.vanniktech:gradle-maven-publish-plugin:0.13.0'
     }
@@ -13,16 +14,17 @@ buildscript {
 
 ext {
     defBuildToolsVersion = '28.0.2'
-    defAndroidXVersion = '1.0.0'
-    defMaterialVersion = '1.0.0'
-    defCompileSdkVersion = 28
+    defAndroidXVersion = '1.2.0'
+    defMaterialVersion = '1.3.0'
+    defCompileSdkVersion = 29
     defMinSdkVersion = 14
 }
 
 allprojects {
     repositories {
-        google()
+        mavenLocal()
         mavenCentral()
+        google()
         // TODO: Remove this repository when Android build tools no longer transitively pulls
         //  `trove4j` or if it's properly published in Maven Central when JCenter goes away.
         //  See: https://github.com/KeepSafe/ReLinker/pull/81#issuecomment-787525670

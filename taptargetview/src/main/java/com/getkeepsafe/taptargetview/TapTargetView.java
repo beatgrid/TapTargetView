@@ -152,6 +152,29 @@ public class TapTargetView extends View {
   @Nullable
   ViewOutlineProvider outlineProvider;
 
+  public static class Options {
+    private boolean ignoreTopBoundary = false;
+    private boolean ignoreBottomBoundary = false;
+
+    public boolean isIgnoreTopBoundary() {
+      return ignoreTopBoundary;
+    }
+
+    public void setIgnoreTopBoundary(boolean ignoreTopBoundary) {
+      this.ignoreTopBoundary = ignoreTopBoundary;
+    }
+
+    public boolean isIgnoreBottomBoundary() {
+      return ignoreBottomBoundary;
+    }
+
+    public void setIgnoreBottomBoundary(boolean ignoreBottomBoundary) {
+      this.ignoreBottomBoundary = ignoreBottomBoundary;
+    }
+  }
+
+  public static final Options options = new Options();
+
   public static TapTargetView showFor(Activity activity, TapTarget target) {
     return showFor(activity, target, null);
   }
@@ -480,11 +503,18 @@ public class TapTargetView extends View {
 
               // We bound the boundaries to be within the screen's coordinates to
               // handle the case where the flag FLAG_LAYOUT_NO_LIMITS is set
-              if (layoutNoLimits) {
+              if (options.ignoreTopBoundary) {
+                topBoundary = 0;
+              } else if (layoutNoLimits) {
                 topBoundary = Math.max(0, rect.top);
-                bottomBoundary = Math.min(rect.bottom, displayMetrics.heightPixels);
               } else {
                 topBoundary = rect.top;
+              }
+              if (options.ignoreBottomBoundary) {
+                bottomBoundary = displayMetrics.heightPixels;
+              } else if (layoutNoLimits) {
+                bottomBoundary = Math.min(rect.bottom, displayMetrics.heightPixels);
+              } else {
                 bottomBoundary = rect.bottom;
               }
             }
@@ -666,9 +696,7 @@ public class TapTargetView extends View {
   protected void onDraw(Canvas c) {
     if (isDismissed || outerCircleCenter == null) return;
 
-    if (topBoundary > 0 && bottomBoundary > 0) {
-      c.clipRect(0, topBoundary, getWidth(), bottomBoundary);
-    }
+    c.clipRect(0, topBoundary, getWidth(), bottomBoundary);
 
     if (dimColor != -1) {
       c.drawColor(dimColor);

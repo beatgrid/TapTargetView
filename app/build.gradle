@@ -22,6 +22,7 @@ android {
 dependencies {
     implementation project(':taptargetview')
     implementation "androidx.appcompat:appcompat:$defAndroidXVersion"
+    implementation "androidx.annotation:annotation:$defAndroidXVersion"
     implementation "com.google.android.material:material:$defMaterialVersion"
     implementation 'com.facebook.stetho:stetho:1.5.0'
 }
